@@ -37,7 +37,7 @@ spec:
         - |
           touch /tmp/metrics-temp
           while true
-            for directory in (du --bytes --separate-dirs --summarize /mnt/data/*)
+            for directory in (du --bytes --summarize /mnt/data/*)
               echo $directory | read size path
               echo "node_directory_size_bytes{path=\"$path\"} $size" \
                 >> /tmp/metrics-temp
