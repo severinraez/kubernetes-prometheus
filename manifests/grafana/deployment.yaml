@@ -46,7 +46,8 @@ spec:
           # timeoutSeconds: 1
         volumeMounts:
         - name: grafana-persistent-storage
-          mountPath: /var
+          mountPath: /var/lib/grafana
       volumes:
       - name: grafana-persistent-storage
-        emptyDir: {}
+        hostPath:
+          path: /mnt/data/monitoring/grafana-data
