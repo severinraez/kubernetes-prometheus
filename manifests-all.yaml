@@ -404,10 +404,11 @@ spec:
           # timeoutSeconds: 1
         volumeMounts:
         - name: grafana-persistent-storage
-          mountPath: /var
+          mountPath: /var/lib/grafana
       volumes:
       - name: grafana-persistent-storage
-        emptyDir: {}
+        hostPath:
+          path: /mnt/data/monitoring/grafana-data
 ---
 apiVersion: v1
 data:
@@ -2505,7 +2506,7 @@ spec:
       - name: prometheus
         image: prom/prometheus:v1.7.0
         args:
-          - '-storage.local.retention=12h'
+          - '-storage.local.retention=360h' # 15d
           - '-storage.local.memory-chunks=500000'
           - '-config.file=/etc/prometheus/prometheus.yaml'
           - '-alertmanager.url=http://alertmanager:9093/'
@@ -2576,7 +2577,7 @@ spec:
         - |
           touch /tmp/metrics-temp
           while true
-            for directory in (du --bytes --separate-dirs --summarize /mnt/data/*)
+            for directory in (du --bytes --summarize /mnt/data/*)
               echo $directory | read size path
               echo "node_directory_size_bytes{path=\"$path\"} $size" \
                 >> /tmp/metrics-temp
