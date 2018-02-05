@@ -21,7 +21,7 @@ spec:
         image: prom/prometheus:v1.7.0
         args:
           - '-storage.local.retention=360h' # 15d
-          - '-storage.local.memory-chunks=500000'
+          - '-storage.local.target-heap-size=536870912' # 500MiB
           - '-config.file=/etc/prometheus/prometheus.yaml'
           - '-alertmanager.url=http://alertmanager:9093/'
         ports:
@@ -33,7 +33,7 @@ spec:
             memory: 500M
           limits:
             cpu: 1000m
-            memory: 500M
+            memory: 1000M
         livenessProbe:
           httpGet:
             path: /status
